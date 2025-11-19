@@ -5,6 +5,7 @@ using System.Net;
 using Core.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -13,9 +14,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Core.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251119153945_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -417,14 +420,6 @@ namespace Core.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ComplexProperty<Dictionary<string, object>>("CreationInfo", "Core.Features.Rentals.Entity.Movie.CreationInfo#CreationInfo", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<long>("CreatedBy")
-                                .HasColumnType("bigint");
-                        });
-
                     b.ComplexProperty<Dictionary<string, object>>("DeletionInfo", "Core.Features.Rentals.Entity.Movie.DeletionInfo#DeletionInfo", b1 =>
                         {
                             b1.IsRequired();
@@ -466,11 +461,11 @@ namespace Core.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("RentDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("RentalDays")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("timestamp with time zone");
@@ -481,8 +476,8 @@ namespace Core.Infrastructure.Migrations
                     b.Property<decimal>("TotalCost")
                         .HasColumnType("numeric");
 
-                    b.Property<long>("userid")
-                        .HasColumnType("bigint");
+                    b.Property<int>("userid")
+                        .HasColumnType("integer");
 
                     b.ComplexProperty<Dictionary<string, object>>("CreationInfo", "Core.Features.Rentals.Entity.RentalE.CreationInfo#CreationInfo", b1 =>
                         {
@@ -522,7 +517,7 @@ namespace Core.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("userid");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Rentals");
                 });
@@ -535,7 +530,10 @@ namespace Core.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("MovieId")
+                    b.Property<int>("MovieId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("MovieId1")
                         .HasColumnType("bigint");
 
                     b.Property<int>("RentalId")
@@ -565,7 +563,7 @@ namespace Core.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("MovieId1");
 
                     b.HasIndex("RentalId1");
 
@@ -699,9 +697,6 @@ namespace Core.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("LoyaltyPoints")
-                        .HasColumnType("integer");
 
                     b.Property<string>("UserProfileImageUrl")
                         .HasColumnType("text");
@@ -959,7 +954,7 @@ namespace Core.Infrastructure.Migrations
                 {
                     b.HasOne("Core.Features.Users.Entity.User", "Customer")
                         .WithMany()
-                        .HasForeignKey("userid")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -970,7 +965,7 @@ namespace Core.Infrastructure.Migrations
                 {
                     b.HasOne("Core.Features.Rentals.Entity.Movie", "Movie")
                         .WithMany("RentalItems")
-                        .HasForeignKey("MovieId")
+                        .HasForeignKey("MovieId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

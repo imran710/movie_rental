@@ -25,7 +25,7 @@ public class UserApi : IEndpoint
         var userGroup = routes.MapGroup("/users").WithTags("User").RequireAuthorization();
         var socialGroup = routes.MapGroup("/users-social").WithTags("User");
 
-        userGroup
+       /* userGroup
             .MapGet("/v1/current-user", GetCurrentUser)
             .WithSummary("Get current user information")
             .WithDescription($"""
@@ -71,7 +71,7 @@ public class UserApi : IEndpoint
 
         userGroup
             .MapPost("/v1/user/create-admin-user", CreateAdminUser)
-            .WithSummary("Create admin user");
+            .WithSummary("Create admin user");*/
     }
 
     private static async Task<Results<Ok<ApiResponse<GetCurrentUserResponse>>, JsonHttpResult<ApiResponse<GetCurrentUserResponse>>>> GetCurrentUser(
