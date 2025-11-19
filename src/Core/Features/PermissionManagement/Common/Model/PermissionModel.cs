@@ -1,0 +1,9 @@
+namespace Core.Features.PermissionManagement.Common.Model;
+
+public class PermissionModel
+{
+    public required long Id { get; set; }
+    public required string Name { get; set; }
+    public required string? Description { get; set; }
+    public required bool IsSystemManaged { get; set; }
+}

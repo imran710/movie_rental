@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AWSSDK.S3" />
+        <PackageReference Include="Betalgo.Ranul.OpenAI" />
+        <PackageReference Include="Bogus" />
+        <PackageReference Include="DeviceDetector.NET" />
+        <PackageReference Include="libphonenumber-csharp" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+        <PackageReference Include="FirebaseAdmin" />
+        <PackageReference Include="FluentEmail.Core" />
+        <PackageReference Include="FluentEmail.Smtp" />
+        <PackageReference Include="FluentEmail.Razor" />
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+        <PackageReference Include="Quartz" />
+        <PackageReference Include="Quartz.Extensions.DependencyInjection" />
+        <PackageReference Include="Quartz.Extensions.Hosting" />
+        <PackageReference Include="Stripe.net" />
+        <PackageReference Include="UnitsNet" />
+        <PackageReference Include="ZiggyCreatures.FusionCache" />
+        <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" />
+        <PackageReference Include="Sep" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Library\Library.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Analytics\Common\Model\" />
+      <Folder Include="Features\Analytics\UseCase\" />
+      <Folder Include="Infrastructure\Migrations\" />
+      <Folder Include="Infrastructure\Scheduling\" />
+    </ItemGroup>
+
+</Project>
