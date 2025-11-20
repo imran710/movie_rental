@@ -8,9 +8,15 @@ public class RentalItem : IEntity, IUpdatableEntity, IDeletableEntity
     public int RentalId { get; set; }
     public RentalE Rental { get; set; } = default!;
 
-    public int MovieId { get; set; }
+    public long MovieId { get; set; }
     public Movie Movie { get; set; }= default!;
 
     public UpdateInfo UpdateInfo { get; private set; } = UpdateInfo.NotUpdated;
-    public DeletionInfo DeletionInfo { get; private set; } = DeletionInfo.NoDeleted();
+    public required CreationInfo CreationInfo { get; init; }
+    public DeletionInfo DeletionInfo { get; } = DeletionInfo.NoDeleted();
+
+    public void MarkAsDeleted()
+    {
+        DeletionInfo.MarkAsDeleted();
+    }
 }

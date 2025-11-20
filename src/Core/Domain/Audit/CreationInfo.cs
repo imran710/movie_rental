@@ -1,7 +1,8 @@
 ﻿using Core.Domain.Helper;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Domain.Audit;
-
+[ComplexType]
 public abstract record CreationInfo<T>(T CreatedBy)
     where T : struct
 {

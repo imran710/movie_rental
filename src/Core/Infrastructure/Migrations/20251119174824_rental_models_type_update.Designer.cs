@@ -14,8 +14,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Core.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251118180414_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20251119174824_rental_models_type_update")]
+    partial class rental_models_type_update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -393,6 +393,183 @@ namespace Core.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("Core.Features.Rentals.Entity.Movie", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ReleaseYear")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RentalType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.ComplexProperty<Dictionary<string, object>>("CreationInfo", "Core.Features.Rentals.Entity.Movie.CreationInfo#CreationInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<long>("CreatedBy")
+                                .HasColumnType("bigint");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("DeletionInfo", "Core.Features.Rentals.Entity.Movie.DeletionInfo#DeletionInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTimeOffset?>("DeletedAt")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("DeletedAt");
+
+                            b1.Property<long?>("DeletedBy")
+                                .HasColumnType("bigint")
+                                .HasColumnName("DeletedBy");
+
+                            b1.Property<bool>("IsDeleted")
+                                .HasColumnType("boolean")
+                                .HasColumnName("IsDeleted");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("UpdateInfo", "Core.Features.Rentals.Entity.Movie.UpdateInfo#UpdateInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTimeOffset?>("UpdatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<long?>("UpdatedBy")
+                                .HasColumnType("bigint");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("Core.Features.Rentals.Entity.RentalE", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("RentDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("TotalCost")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("userid")
+                        .HasColumnType("bigint");
+
+                    b.ComplexProperty<Dictionary<string, object>>("CreationInfo", "Core.Features.Rentals.Entity.RentalE.CreationInfo#CreationInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<long>("CreatedBy")
+                                .HasColumnType("bigint");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("DeletionInfo", "Core.Features.Rentals.Entity.RentalE.DeletionInfo#DeletionInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTimeOffset?>("DeletedAt")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("DeletedAt");
+
+                            b1.Property<long?>("DeletedBy")
+                                .HasColumnType("bigint")
+                                .HasColumnName("DeletedBy");
+
+                            b1.Property<bool>("IsDeleted")
+                                .HasColumnType("boolean")
+                                .HasColumnName("IsDeleted");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("UpdateInfo", "Core.Features.Rentals.Entity.RentalE.UpdateInfo#UpdateInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTimeOffset?>("UpdatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<long?>("UpdatedBy")
+                                .HasColumnType("bigint");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("userid");
+
+                    b.ToTable("Rentals");
+                });
+
+            modelBuilder.Entity("Core.Features.Rentals.Entity.RentalItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("MovieId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("RentalId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("RentalId1")
+                        .HasColumnType("bigint");
+
+                    b.ComplexProperty<Dictionary<string, object>>("CreationInfo", "Core.Features.Rentals.Entity.RentalItem.CreationInfo#CreationInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<long>("CreatedBy")
+                                .HasColumnType("bigint");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("UpdateInfo", "Core.Features.Rentals.Entity.RentalItem.UpdateInfo#UpdateInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateTimeOffset?>("UpdatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<long?>("UpdatedBy")
+                                .HasColumnType("bigint");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("RentalId1");
+
+                    b.ToTable("RentalItems");
                 });
 
             modelBuilder.Entity("Core.Features.Users.Entity.AchievementTier", b =>
@@ -775,6 +952,36 @@ namespace Core.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Core.Features.Rentals.Entity.RentalE", b =>
+                {
+                    b.HasOne("Core.Features.Users.Entity.User", "Customer")
+                        .WithMany()
+                        .HasForeignKey("userid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Core.Features.Rentals.Entity.RentalItem", b =>
+                {
+                    b.HasOne("Core.Features.Rentals.Entity.Movie", "Movie")
+                        .WithMany("RentalItems")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Features.Rentals.Entity.RentalE", "Rental")
+                        .WithMany("RentalItems")
+                        .HasForeignKey("RentalId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Rental");
+                });
+
             modelBuilder.Entity("Core.Features.Users.Entity.DashboardFile", b =>
                 {
                     b.HasOne("Core.Features.Users.Entity.User", "User")
@@ -820,6 +1027,16 @@ namespace Core.Infrastructure.Migrations
                     b.Navigation("RolePermissions");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Core.Features.Rentals.Entity.Movie", b =>
+                {
+                    b.Navigation("RentalItems");
+                });
+
+            modelBuilder.Entity("Core.Features.Rentals.Entity.RentalE", b =>
+                {
+                    b.Navigation("RentalItems");
                 });
 
             modelBuilder.Entity("Core.Features.Users.Entity.User", b =>

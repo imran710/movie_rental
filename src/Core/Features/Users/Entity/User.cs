@@ -25,6 +25,7 @@ public class User : IEntity, IDeletableEntity
     public DateTimeOffset CreatedAt { get; private set; } = DateTimeHelperStatic.Now;
     public DeletionInfo DeletionInfo { get; } = new();
 
+    public int LoyaltyPoints { get; set; }
     public string? UserProfileImageUrl { get; set; }
 
     public List<LoginActivity> LoginActivities { get; private set; } = [];

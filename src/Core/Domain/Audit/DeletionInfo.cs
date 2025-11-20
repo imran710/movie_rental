@@ -1,7 +1,8 @@
 ﻿using Core.Domain.Helper;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Domain.Audit;
-
+[ComplexType]
 public record DeletionInfo<T> where T : struct
 {
     public bool IsDeleted { get; private set; } = false;
