@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  rental-api:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    image: rental-api:1.0
+    container_name: rental-api
+    ports:
+      - "5000:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: "http://+:5000" 
+      ConnectionStrings__DefaultConnection: "Host=postgres-db;Port=5432;User ID=postgres;Password=1213;Database=testDB;"
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    volumes:
+      - rental-data:/app/data
+    restart: unless-stopped
+
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1213
+      POSTGRES_DB: testDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  rental-data:
+  pgdata:
