@@ -4,15 +4,16 @@ services:
   rental-api:
     build:
       context: .
-      dockerfile: Dockerfile 
+      dockerfile: Dockerfile
     image: rental-api:1.0
     container_name: rental-api
     ports:
       - "5000:5000"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ASPNETCORE_URLS: "http://+:5000" 
-      ConnectionStrings__DefaultConnection: "Host=postgres-db;Port=5432;User ID=postgres;Password=1213;Database=testDB;"
+      ASPNETCORE_URLS: "http://+:5000"
+      Database__ConnectionString: "Host=postgres-db;Port=5432;Username=postgres;Password=1213;Database=testDB;"
+
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -36,7 +37,7 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 volumes:
   rental-data:
