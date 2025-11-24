@@ -1,54 +1,61 @@
+# ===========================
 # Stage 1: Build
+# ===========================
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# Set NuGet packages location
-ENV NUGET_PACKAGES=/app/nugetpackages
+# Set NuGet location for caching
+ENV NUGET_PACKAGES=/src/nugetpackages
 
-# Copy project files for caching
-COPY *.sln ./
-COPY Directory.Packages.props ./
-COPY src/Api/Api.csproj ./src/Api/
-COPY src/Core/Core.csproj ./src/Core/
-COPY src/Library/Library.csproj ./src/Library/
+# Copy solution + dependency files (cache restore layer)
+COPY *.sln .
+COPY Directory.Packages.props .
+COPY src/Api/Api.csproj src/Api/
+COPY src/Core/Core.csproj src/Core/
+COPY src/Library/Library.csproj src/Library/
 
-# Restore dependencies
+# Restore dependencies (cached)
 RUN dotnet restore
 
-# Copy the rest of the source code
+# Copy full source
 COPY . .
 
-# Build and publish
-WORKDIR /app/src/Api
-RUN dotnet build --configuration Release --no-restore
-RUN dotnet publish --configuration Release --no-build --output /app/publish
+# Build & publish
+WORKDIR /src/src/Api
+RUN dotnet publish -c Release -o /app/publish --no-restore
 
+
+# ===========================
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
-
-# Create non-root user
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
-
+# ===========================
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
-COPY --from=build /app/publish ./
 
-# Data directory with permissions
-RUN mkdir -p ./data && chown -R appuser:appgroup ./data && chmod -R 755 ./data
+# Create non-root runtime user (recommended)
+RUN addgroup --system appgroup \
+    && adduser --system --ingroup appgroup appuser
 
-# Environment variables
-ENV ASPNETCORE_URLS=http://+:5000 \
-    ASPNETCORE_ENVIRONMENT=Production
+# Copy runtime build
+COPY --from=build /app/publish .
 
-# Expose port
+# Create persistent app data dir
+RUN mkdir -p /app/data \
+    && chown -R appuser:appgroup /app/data \
+    && chmod -R 755 /app/data
+
+# Env variables (must match your docker-compose)
+ENV ASPNETCORE_ENVIRONMENT=Production \
+    ASPNETCORE_URLS=http://+:5000
+
+# Expose API port
 EXPOSE 5000
 
 # Switch to non-root user
 USER appuser
 
-# Entry point
+# Start application
 ENTRYPOINT ["dotnet", "Api.dll"]
 
-# Metadata
 LABEL maintainer="nasim@gmail.com" \
-      description="Rental API" \
+      description="Rental API (Optimized)" \
       version="1.0"
